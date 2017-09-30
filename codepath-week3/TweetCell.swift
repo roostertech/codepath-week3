@@ -7,18 +7,21 @@
 //
 
 import UIKit
+import AFNetworking
 
 class TweetCell: UITableViewCell {
 
-    @IBOutlet weak var userImage: UIImageView!
-    @IBOutlet weak var userName: UILabel!
-    @IBOutlet weak var userScreenName: UILabel!
-    @IBOutlet weak var tweetTime: UILabel!
-    @IBOutlet weak var tweetMessage: UILabel!
+    @IBOutlet private weak var userImage: UIImageView!
+    @IBOutlet private weak var userName: UILabel!
+    @IBOutlet private weak var userScreenName: UILabel!
+    @IBOutlet private weak var tweetTime: UILabel!
+    @IBOutlet private weak var tweetMessage: UILabel!
     
-    @IBOutlet weak var replyCount: UILabel!
-    @IBOutlet weak var retweetCount: UILabel!
-    @IBOutlet weak var likeCount: UILabel!
+    @IBOutlet private weak var replyCount: UILabel!
+    @IBOutlet private weak var retweetCount: UILabel!
+    @IBOutlet private weak var likeCount: UILabel!
+    
+    private var tweet: Tweet!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,6 +32,24 @@ class TweetCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func prepare(tweet: Tweet!) {
+        self.tweet = tweet
+        
+        if let user = tweet.user {
+            userName.text = user.name
+            userScreenName.text = "@\(user.screenName!)"
+            if let url = user.profileUrl {
+                userImage.setImageWith(url)
+                userImage.layer.cornerRadius = 5
+                userImage.layer.masksToBounds = true;
+            }
+        }
+
+        retweetCount.text = tweet.retweetCount?.description
+        tweetMessage.text = tweet.text
+        tweetTime.text = tweet.timestamp?.getElapsedInterval()
     }
 
 }

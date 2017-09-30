@@ -9,10 +9,12 @@
 import Foundation
 
 class Tweet: NSObject {
+    
     var text: String?
     var timestamp: Date?
     var retweetCount: Int?
     var favCount: Int?
+    var user: User?
     
     init(dictionary: Dictionary<String, Any>) {
         text = dictionary["text"] as? String
@@ -25,6 +27,10 @@ class Tweet: NSObject {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
             timestamp = formatter.date(from: timestampStr)
+        }
+        
+        if let userData = dictionary["user"] as? Dictionary<String, AnyObject> {
+            user = User(dictionary: userData)
         }
     }
     

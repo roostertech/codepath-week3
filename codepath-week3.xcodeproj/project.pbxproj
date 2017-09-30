@@ -18,6 +18,7 @@
 		76B4A4E81F7B94AB00D72526 /* TwitterClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B4A4E71F7B94AB00D72526 /* TwitterClient.swift */; };
 		76B4A50E1F7E288000D72526 /* TweetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B4A50D1F7E288000D72526 /* TweetsViewController.swift */; };
 		76B4A5131F7EA6C000D72526 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B4A5121F7EA6C000D72526 /* TweetCell.swift */; };
+		76B4A5161F7F27B900D72526 /* Date+getElapsedInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B4A5151F7F27B900D72526 /* Date+getElapsedInterval.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		76B4A4E71F7B94AB00D72526 /* TwitterClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterClient.swift; sourceTree = "<group>"; };
 		76B4A50D1F7E288000D72526 /* TweetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsViewController.swift; sourceTree = "<group>"; };
 		76B4A5121F7EA6C000D72526 /* TweetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
+		76B4A5151F7F27B900D72526 /* Date+getElapsedInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+getElapsedInterval.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 		76B4A4CB1F7B703000D72526 /* codepath-week3 */ = {
 			isa = PBXGroup;
 			children = (
+				76B4A5141F7F27A100D72526 /* Extension */,
 				76B4A50F1F7EA68700D72526 /* Cell */,
 				76B4A4E21F7B8BDB00D72526 /* API */,
 				76B4A4E11F7B8BC400D72526 /* Models */,
@@ -125,6 +128,14 @@
 				76B4A5121F7EA6C000D72526 /* TweetCell.swift */,
 			);
 			name = Cell;
+			sourceTree = "<group>";
+		};
+		76B4A5141F7F27A100D72526 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				76B4A5151F7F27B900D72526 /* Date+getElapsedInterval.swift */,
+			);
+			name = Extension;
 			sourceTree = "<group>";
 		};
 		F9FE8D3C910D1F34C93117A5 /* Frameworks */ = {
@@ -272,6 +283,7 @@
 				76B4A5131F7EA6C000D72526 /* TweetCell.swift in Sources */,
 				76B4A4CD1F7B703000D72526 /* AppDelegate.swift in Sources */,
 				76B4A4E61F7B8C0200D72526 /* User.swift in Sources */,
+				76B4A5161F7F27B900D72526 /* Date+getElapsedInterval.swift in Sources */,
 				76B4A50E1F7E288000D72526 /* TweetsViewController.swift in Sources */,
 				76B4A4E81F7B94AB00D72526 /* TwitterClient.swift in Sources */,
 				76B4A4E41F7B8BF100D72526 /* Tweet.swift in Sources */,

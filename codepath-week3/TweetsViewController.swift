@@ -12,11 +12,15 @@ class TweetsViewController: UIViewController {
 
     @IBOutlet weak var tweetsView: UITableView!
     
-    var tweets: [Tweet]!
+    var tweets: [Tweet] = [Tweet]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        tweetsView.estimatedRowHeight = 140
+        tweetsView.rowHeight = UITableViewAutomaticDimension
+        
         TwitterClient.sharedInstance.homeTimeline(success: { (tweets: [Tweet]) in
             self.tweets = tweets
             print("Have \(tweets.count) tweets")
@@ -35,6 +39,9 @@ class TweetsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func onPostTweet(_ sender: Any) {
+        print("Posting a tweet")
+    }
 
     /*
     // MARK: - Navigation
@@ -48,14 +55,15 @@ class TweetsViewController: UIViewController {
 
     
 }
-// MARK: - Navigation
+// MARK: - UITableView
 extension TweetsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tweets.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell") as! TweetCellg
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell") as! TweetCell
+        cell.prepare(tweet: tweets[indexPath.row])
         return cell
     }
 }

@@ -29,22 +29,6 @@ class LoginViewController: UIViewController {
             self.performSegue(withIdentifier: "loginSegue", sender: nil)
         }) { (error: Error) in
         }
-//        
-//        let twitterClient = BDBOAuth1SessionManager(baseURL: URL(string: "https://api.twitter.com")!, consumerKey: "U6hBZlE8BonmhRL5tOlJ3SJ8C", consumerSecret: "hxbfMA4E0RZuIbtprSyZqViFjCOurnx06OUGGCCxyBDBxdQhwm")
-//        
-//        twitterClient?.deauthorize()
-//        twitterClient?.fetchRequestToken(withPath: "oauth/request_token", method: "GET", callbackURL: URL(string:"cptwit://oauth"), scope: nil, success: { (requestToken:
-//            BDBOAuth1Credential!)-> Void in
-//            print("Got token \(requestToken.token)")
-//            
-//            let url = URL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token!)")
-//            UIApplication.shared.open(url!, options: [String: Any](), completionHandler: nil)
-//            
-//        },failure: {(error: Error!) -> Void in
-//            print("Error \(error.localizedDescription)")
-//
-//        })
-        
     }
     /*
     // MARK: - Navigation
