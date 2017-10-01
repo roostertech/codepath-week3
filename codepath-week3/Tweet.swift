@@ -69,7 +69,7 @@ class Tweet: NSObject {
             if let medias = extendedEntities["media"] as? [Dictionary<String, AnyObject>] {
                 for media in medias {
                     if media["type"] as! String == "photo" {
-                        photoUrl = media["url"] as? String
+                        photoUrl = media["media_url_https"] as? String
                         break
                     }
                 }
