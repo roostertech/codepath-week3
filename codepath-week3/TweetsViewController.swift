@@ -12,10 +12,11 @@ import PopupDialog
 
 class TweetsViewController: UIViewController {
     
-    @IBOutlet weak var tweetsView: UITableView!
+    @IBOutlet fileprivate weak var tweetsView: UITableView!
     
-    var tweets: [Tweet] = [Tweet]()
-    
+    fileprivate var tweets: [Tweet] = [Tweet]()
+    fileprivate var isMoreDataLoading = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,7 +27,7 @@ class TweetsViewController: UIViewController {
         tweetsView.rowHeight = UITableViewAutomaticDimension
         edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
         
-        refreshData(refreshControl: nil, showProgress: true)
+        refreshData(refreshControl: nil, fetchMore: false)
     }
     
     @IBAction func onLogout(_ sender: Any) {
@@ -38,27 +39,43 @@ class TweetsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func refreshData(refreshControl: UIRefreshControl?, showProgress : Bool) {
+    fileprivate func refreshData(refreshControl: UIRefreshControl?, fetchMore : Bool) {
+        var maxId: String?
+        if self.tweets.count > 0 && fetchMore {
+            let lastTweet = tweets[self.tweets.count - 1]
+            maxId = lastTweet.tweetId
+        }
         
-        TwitterClient.sharedInstance.homeTimeline(success: { (tweets: [Tweet]) in
-            self.tweets = tweets
-            print("Have \(tweets.count) tweets")
-            self.tweetsView.reloadData()
+        TwitterClient.sharedInstance.homeTimeline(maxId: maxId) { (response: Any?, error: Error?) in
             refreshControl?.endRefreshing()
+            self.isMoreDataLoading = false
+
+            if error == nil {
+                guard let tweets = response as? [Tweet] else {
+                    return
+                }
+                if maxId == nil {
+                    self.tweets = tweets
+                } else {
+                    self.tweets.append(contentsOf: tweets)
+                }
+                print("Have \(tweets.count) tweets")
+                self.tweetsView.reloadData()
+            }
             
-        }) { (error: Error) in
-            refreshControl?.endRefreshing()
         }
     }
+    
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
-        refreshData(refreshControl: refreshControl, showProgress: false)
+        refreshData(refreshControl: refreshControl, fetchMore: false)
     }
     
-    func onNewTweet(_ newTweet: Tweet) {
+    private func onNewTweet(_ newTweet: Tweet) {
         self.tweets.insert(newTweet, at: 0)
         self.tweetsView.reloadData()
     }
-    // MARK: - Navigation
+    
+// MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.destination is SingleTweetViewController {
             
@@ -87,13 +104,32 @@ class TweetsViewController: UIViewController {
 
 // MARK: - UITableView
 extension TweetsViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.tweets.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell") as! TweetCell
         cell.prepare(tweet: self.tweets[indexPath.row])
         return cell
+    }
+}
+
+// MARK:- UIScrollViewDelegate
+extension TweetsViewController: UIScrollViewDelegate {
+    internal func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tweetsView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tweetsView.bounds.size.height
+            
+//            print("Height \(scrollViewContentHeight) threshold \(scrollOffsetThreshold) \(tweetsView.contentSize.height) \(tweetsView.bounds.size.height)")
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tweetsView.isDragging) {
+                isMoreDataLoading = true
+                self.refreshData(refreshControl: nil, fetchMore: true)
+            }
+        }
     }
 }

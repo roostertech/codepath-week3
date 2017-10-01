@@ -65,18 +65,22 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
     }
     
-    func homeTimeline(success: @escaping ([Tweet]) -> (), failure: @escaping (Error) -> ()) {
-        get("1.1/statuses/home_timeline.json", parameters: nil, progress: nil, success: { (task:URLSessionDataTask, response: Any?) in
-            let dictionaries = response as! [Dictionary<String, Any>]
-            let tweets = Tweet.tweetsWithArray(dictionaries: dictionaries)
-//            for tweet in tweets {
-//                print("text \(tweet.text!)")
-//            }
-            success(tweets)
-        }, failure: { (task: URLSessionDataTask?, error: Error) in
-            print("Error \(error.localizedDescription)")
-            failure(error)
-        })
+    func homeTimeline(maxId: String?, completion: @escaping (Any?, Error?) -> ()) {
+        var params: [String: String] = [String: String]()
+        if maxId != nil {
+            params["max_id"] = maxId
+        }
+        
+
+        self.get(params: params, endpoint: "1.1/statuses/home_timeline.json") { (response: Any?, error: Error?) in
+            if error == nil {
+                let dictionaries = response as! [Dictionary<String, Any>]
+                let tweets = Tweet.tweetsWithArray(dictionaries: dictionaries)
+                completion(tweets, nil)
+            } else {
+                completion(nil, error)
+            }
+        }
     }
     
     func currentAccount(success: @escaping (User) -> (), failure: @escaping (Error) -> ()) {
@@ -133,6 +137,17 @@ class TwitterClient: BDBOAuth1SessionManager {
     func post(params: [String : String?], endpoint: String, completion: @escaping (Any?, Error?) -> ()) {
         print("Invoking POST \(endpoint) params \(params)")
         post(endpoint, parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            print(response)
+            completion(response, nil)
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+            print("Error \(error.localizedDescription)")
+            completion(nil, error)
+        })
+    }
+    
+    func get(params: [String : String?], endpoint: String, completion: @escaping (Any?, Error?) -> ()) {
+        print("Invoking GET \(endpoint) params \(params)")
+        get(endpoint, parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
             print(response)
             completion(response, nil)
         }, failure: { (task: URLSessionDataTask?, error: Error) in
