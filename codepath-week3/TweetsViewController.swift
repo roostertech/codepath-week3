@@ -117,6 +117,12 @@ extension TweetsViewController: UITableViewDelegate, UITableViewDataSource {
         cell.prepare(tweet: self.tweets[indexPath.row])
         return cell
     }
+    
+    // get rid of selection gray
+    internal func tableView(_ tableView: UITableView, didSelectRowAt: IndexPath) {
+        self.tweetsView.deselectRow(at: didSelectRowAt, animated: true)
+    }
+    
 }
 
 // MARK:- UIScrollViewDelegate
