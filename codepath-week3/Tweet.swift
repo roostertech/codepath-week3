@@ -20,6 +20,9 @@ class Tweet: NSObject {
     var favorited: Bool = false
     var retweeted: Bool = false
 
+    var isARetweet: Bool = false
+    var originalUser: User?
+    
     convenience init(dictionary: Dictionary<String, Any>) {
         self.init()
         self.update(dictionary: dictionary)
@@ -33,6 +36,21 @@ class Tweet: NSObject {
         retweetCount = (dictionary["retweet_count"] as? Int) ?? 0
         favCount = (dictionary["favorite_count"] as? Int) ?? 0
         
+        
+        if let userData = dictionary["user"] as? Dictionary<String, AnyObject> {
+            user = User(dictionary: userData)
+        }
+        
+        // if there is a retweet status, that mean the outter user is the retweeter
+        if let retweetStatus = dictionary["retweeted_status"] as? Dictionary<String, AnyObject> {
+            originalUser = User(dictionary: retweetStatus["user"] as! Dictionary<String, AnyObject>)
+            favCount = (retweetStatus["favorite_count"] as? Int) ?? 0
+
+            isARetweet = true
+        } else {
+            originalUser = user
+        }
+        
         if let timestampStr = dictionary["created_at"] as? String {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
@@ -45,10 +63,7 @@ class Tweet: NSObject {
             prettyTweetTime = prettyTimeFormatter.string(from: timestamp!)
             
         }
-        
-        if let userData = dictionary["user"] as? Dictionary<String, AnyObject> {
-            user = User(dictionary: userData)
-        }
+
     }
     
     class func tweetsWithArray(dictionaries: [Dictionary<String, Any>]) -> [Tweet] {

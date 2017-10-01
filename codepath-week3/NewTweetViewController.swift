@@ -27,6 +27,8 @@ class NewTweetViewController: UIViewController {
         }
         tweetButton.isEnabled = true
         textInput.becomeFirstResponder()
+        textInput.layer.cornerRadius = 5
+        textInput.layer.masksToBounds = true;
     }
 
     override func didReceiveMemoryWarning() {

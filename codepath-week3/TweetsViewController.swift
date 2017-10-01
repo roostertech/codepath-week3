@@ -70,7 +70,11 @@ class TweetsViewController: UIViewController {
         refreshData(refreshControl: refreshControl, fetchMore: false)
     }
     
-    private func onNewTweet(_ newTweet: Tweet) {
+    private func onNewTweet(_ newTweet: Tweet?) {
+        guard let newTweet = newTweet else {
+            self.tweetsView.reloadData()
+            return
+        }
         self.tweets.insert(newTweet, at: 0)
         self.tweetsView.reloadData()
     }
@@ -84,7 +88,7 @@ class TweetsViewController: UIViewController {
                 return
             }
             let indexPath = self.tweetsView.indexPath(for: cell)
-            detailController.prepare(tweet: tweets[indexPath!.row], addTweetAction: { (newTweet: Tweet) in
+            detailController.prepare(tweet: tweets[indexPath!.row], addTweetAction: { (newTweet: Tweet?) in
                 self.onNewTweet(newTweet)
             })
             

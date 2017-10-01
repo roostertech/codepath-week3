@@ -137,7 +137,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     func post(params: [String : String?], endpoint: String, completion: @escaping (Any?, Error?) -> ()) {
         print("Invoking POST \(endpoint) params \(params)")
         post(endpoint, parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
-            print(response)
+            print(response ?? "No response?")
             completion(response, nil)
         }, failure: { (task: URLSessionDataTask?, error: Error) in
             print("Error \(error.localizedDescription)")
@@ -148,7 +148,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     func get(params: [String : String?], endpoint: String, completion: @escaping (Any?, Error?) -> ()) {
         print("Invoking GET \(endpoint) params \(params)")
         get(endpoint, parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
-            print(response)
+            print(response ?? "No response?")
             completion(response, nil)
         }, failure: { (task: URLSessionDataTask?, error: Error) in
             print("Error \(error.localizedDescription)")

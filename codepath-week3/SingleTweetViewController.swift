@@ -23,7 +23,7 @@ class SingleTweetViewController: UIViewController {
     @IBOutlet private weak var likeButton: UIButton!
     @IBOutlet private weak var retweetButton: UIButton!
     @IBOutlet private weak var replyButton: UIButton!
-    private var addTweetAction: (Tweet) -> () = { (newTweet: Tweet) in }
+    private var addTweetAction: (Tweet?) -> () = { (newTweet: Tweet?) in }
 
     private var tweet: Tweet!
     
@@ -85,6 +85,7 @@ class SingleTweetViewController: UIViewController {
                     self.tweet.update(dictionary: response as! Dictionary<String, Any>)
                     self.tweet.retweeted = false // work around api oddity
                     self.updateView()
+                    self.addTweetAction(nil) // reload tweets view
                 }
             })
         } else {
@@ -94,6 +95,8 @@ class SingleTweetViewController: UIViewController {
                 if error == nil {
                     self.tweet.update(dictionary: response as! Dictionary<String, Any>)
                     self.updateView()
+                    self.addTweetAction(nil) // reload tweets view
+
                 }
             })
         }
@@ -111,6 +114,7 @@ class SingleTweetViewController: UIViewController {
                 if error == nil {
                     self.tweet.update(dictionary: response as! Dictionary<String, Any>)
                     self.updateView()
+                    self.addTweetAction(nil) // reload tweets view
                 }
             })
         } else {
@@ -120,6 +124,7 @@ class SingleTweetViewController: UIViewController {
                 if error == nil {
                     self.tweet.update(dictionary: response as! Dictionary<String, Any>)
                     self.updateView()
+                    self.addTweetAction(nil) // reload tweets view
                 }
             })
         }
@@ -133,7 +138,7 @@ class SingleTweetViewController: UIViewController {
         }
     }
     
-    func prepare(tweet: Tweet!, addTweetAction: ((Tweet) -> ())?) {
+    func prepare(tweet: Tweet!, addTweetAction: ((Tweet?) -> ())?) {
         self.tweet = tweet
         if addTweetAction != nil {
             self.addTweetAction = addTweetAction!

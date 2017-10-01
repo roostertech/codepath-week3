@@ -23,6 +23,9 @@ class TweetCell: UITableViewCell {
     @IBOutlet private weak var heartImage: UIImageView!
     @IBOutlet private weak var retweetImage: UIImageView!
     
+    @IBOutlet private weak var topRetweetImage: UIImageView!
+    @IBOutlet private weak var topRetweetText: UILabel!
+    
     private var tweet: Tweet!
     
     override func awakeFromNib() {
@@ -52,7 +55,7 @@ class TweetCell: UITableViewCell {
             retweetImage.tintColor = .black
         }
 
-        if let user = tweet.user {
+        if let user = tweet.originalUser {
             userName.text = user.name
             userScreenName.text = "@\(user.screenName!)"
             if let url = user.profileUrl {
@@ -60,6 +63,15 @@ class TweetCell: UITableViewCell {
                 userImage.layer.cornerRadius = 5
                 userImage.layer.masksToBounds = true;
             }
+        }
+        
+        if tweet.isARetweet {
+            topRetweetImage.isHidden = false
+            topRetweetText.isHidden = false
+            topRetweetText.text = "Retweeted by \(tweet.user!.name!)"
+        } else {
+            topRetweetImage.isHidden = true
+            topRetweetText.isHidden = true
         }
 
         retweetCount.text = tweet.retweetCount?.description
