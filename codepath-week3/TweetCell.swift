@@ -20,6 +20,8 @@ class TweetCell: UITableViewCell {
     @IBOutlet private weak var replyCount: UILabel!
     @IBOutlet private weak var retweetCount: UILabel!
     @IBOutlet private weak var likeCount: UILabel!
+    @IBOutlet private weak var heartImage: UIImageView!
+    @IBOutlet private weak var retweetImage: UIImageView!
     
     private var tweet: Tweet!
     
@@ -36,7 +38,20 @@ class TweetCell: UITableViewCell {
     
     func prepare(tweet: Tweet!) {
         self.tweet = tweet
+
+        // change to red if user favorited this tweet
+        if tweet.favorited {
+            heartImage.tintColor = .red
+        } else {
+            heartImage.tintColor = .black
+        }
         
+        if tweet.retweeted {
+            retweetImage.tintColor = .green
+        } else {
+            retweetImage.tintColor = .black
+        }
+
         if let user = tweet.user {
             userName.text = user.name
             userScreenName.text = "@\(user.screenName!)"
@@ -48,6 +63,7 @@ class TweetCell: UITableViewCell {
         }
 
         retweetCount.text = tweet.retweetCount?.description
+        likeCount.text = tweet.favCount?.description
         tweetMessage.text = tweet.text
         tweetTime.text = tweet.timestamp?.getElapsedInterval()
     }

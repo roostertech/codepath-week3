@@ -89,4 +89,55 @@ class TwitterClient: BDBOAuth1SessionManager {
             failure(error)
         })
     }
+
+    func updateStatus(newStatus: String!, replyTo: String?, completion: @escaping (Any?, Error?) -> ()) {
+        var params = ["status": newStatus]
+        if let replyTo = replyTo {
+            params["in_reply_to_status_id"] = replyTo
+        }
+
+        print("Sending tweet \(newStatus.characters.count)")
+        self.post(params: params, endpoint: "1.1/statuses/update.json", completion: completion)
+    }
+
+    //MARK:- Favorite
+    func favoriteCreate(tweetId: String!, completion: @escaping (Any?, Error?) -> ()) {
+        let params = ["id": tweetId]
+        
+        print("Favoriting tweet \(tweetId)")
+        self.post(params: params, endpoint: "1.1/favorites/create.json", completion: completion)
+    }
+    
+    func favoriteDestroy(tweetId: String!, completion: @escaping (Any?, Error?) -> ()) {
+        let params = ["id": tweetId]
+        
+        print("Un-Favoriting tweet \(tweetId)")
+        self.post(params: params, endpoint: "1.1/favorites/destroy.json", completion: completion)
+    }
+    
+    //MARK:- Retweet
+    func retweet(tweetId: String, completion: @escaping (Any?, Error?) -> ()) {
+        let params = ["id": tweetId]
+        
+        print("Retweeting \(tweetId)")
+        self.post(params: params, endpoint: "1.1/statuses/retweet/\(tweetId).json", completion: completion)
+    }
+    
+    func unRetweet(tweetId: String, completion: @escaping (Any?, Error?) -> ()) {
+        let params = ["id": tweetId]
+        
+        print("Un-Retweeting \(tweetId)")
+        self.post(params: params, endpoint: "1.1/statuses/unretweet/\(tweetId).json", completion: completion)
+    }
+    
+    func post(params: [String : String?], endpoint: String, completion: @escaping (Any?, Error?) -> ()) {
+        print("Invoking POST \(endpoint) params \(params)")
+        post(endpoint, parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            print(response)
+            completion(response, nil)
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+            print("Error \(error.localizedDescription)")
+            completion(nil, error)
+        })
+    }
 }

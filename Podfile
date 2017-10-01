@@ -9,5 +9,6 @@ target 'codepath-week3' do
   pod 'AFNetworking', '3.0.0'
   pod 'BDBOAuth1Manager', '2.0.0'
   pod "MBProgressHUD"
+  pod 'PopupDialog'
 
 end
