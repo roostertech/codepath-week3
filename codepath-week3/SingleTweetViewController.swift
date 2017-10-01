@@ -28,8 +28,8 @@ class SingleTweetViewController: UIViewController {
     
     @IBOutlet private weak var topRetweetStack: UIStackView!
     @IBOutlet private weak var topRetweetText: UILabel!
+    
     private var addTweetAction: (Tweet?) -> () = { (newTweet: Tweet?) in }
-
     private var tweet: Tweet!
     
     private func updateView() {

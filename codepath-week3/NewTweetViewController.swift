@@ -9,7 +9,7 @@
 import UIKit
 
 class NewTweetViewController: UIViewController {
-
+    
     @IBOutlet fileprivate weak var textInput: UITextView!
     @IBOutlet fileprivate weak var characterCounter: UILabel!
     @IBOutlet fileprivate weak var tweetButton: UIButton!
@@ -17,7 +17,7 @@ class NewTweetViewController: UIViewController {
     fileprivate var replyTo: String?
     fileprivate var initialText: String?
     fileprivate var addTweetAction: (Tweet) -> () = { (newTweet: Tweet) in }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,7 +30,7 @@ class NewTweetViewController: UIViewController {
         textInput.layer.cornerRadius = 5
         textInput.layer.masksToBounds = true;
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -38,7 +38,7 @@ class NewTweetViewController: UIViewController {
     
     @IBAction func onTweet(_ sender: Any) {
         tweetButton.isEnabled = false
-
+        
         TwitterClient.sharedInstance.updateStatus(newStatus: textInput.text, replyTo: replyTo) { (response: Any?, error: Error?) in
             if error == nil {
                 print("Finished tweeting")

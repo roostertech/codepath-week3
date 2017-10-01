@@ -26,7 +26,7 @@ class TweetCell: UITableViewCell {
     @IBOutlet private weak var topRetweetImage: UIImageView!
     @IBOutlet private weak var topRetweetText: UILabel!
     
-    @IBOutlet weak var topRetweetStack: UIStackView!
+    @IBOutlet private weak var topRetweetStack: UIStackView!
     private var tweet: Tweet!
     
     override func awakeFromNib() {

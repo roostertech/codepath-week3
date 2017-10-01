@@ -14,8 +14,8 @@ class TwitterClient: BDBOAuth1SessionManager {
                                               consumerKey: "U6hBZlE8BonmhRL5tOlJ3SJ8C",
                                               consumerSecret: "hxbfMA4E0RZuIbtprSyZqViFjCOurnx06OUGGCCxyBDBxdQhwm")!
     
-    var loginSuccess: (()->())?
-    var loginFailure: ((Error) -> ())?
+    private var loginSuccess: (()->())?
+    private var loginFailure: ((Error) -> ())?
 
     func login(success: @escaping  ()->(), failure: @escaping (Error) -> ()) {
         loginSuccess = success
