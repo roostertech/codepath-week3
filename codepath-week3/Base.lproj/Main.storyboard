@@ -235,6 +235,7 @@
                                             <outlet property="retweetCount" destination="9PI-PL-3Ad" id="cE5-b5-uVG"/>
                                             <outlet property="retweetImage" destination="fnh-mk-KAc" id="A3y-TM-fr5"/>
                                             <outlet property="topRetweetImage" destination="ug4-rl-ZPP" id="5i0-oE-zY4"/>
+                                            <outlet property="topRetweetStack" destination="07X-ev-6U3" id="OoT-cO-INe"/>
                                             <outlet property="topRetweetText" destination="F0g-6r-I97" id="Njn-qG-s30"/>
                                             <outlet property="tweetMessage" destination="KHx-fO-IGS" id="Bkq-Zn-cPG"/>
                                             <outlet property="tweetTime" destination="aZU-HG-RZL" id="NMt-2W-VvY"/>
@@ -300,8 +301,38 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="JC4-jK-XHS" userLabel="Retweet by">
+                                <rect key="frame" x="0.0" y="64" width="375" height="20"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RKL-ig-SCX">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="20"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="Llm-d8-aA2"/>
+                                            <constraint firstAttribute="height" constant="20" id="OMM-VQ-Oa3"/>
+                                        </constraints>
+                                    </view>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="retweet" translatesAutoresizingMaskIntoConstraints="NO" id="SBH-D6-HeJ">
+                                        <rect key="frame" x="60" y="0.0" width="20" height="20"/>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="20D-IM-a78"/>
+                                            <constraint firstAttribute="width" constant="20" id="y2x-eo-kx9"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Retweeted by" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1be-k0-kMp">
+                                        <rect key="frame" x="90" y="0.0" width="285" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="MfJ-dA-aZ0"/>
+                                </constraints>
+                            </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="kfL-uc-nuB" userLabel="Tweet Stack">
-                                <rect key="frame" x="10" y="74" width="355" height="235.5"/>
+                                <rect key="frame" x="10" y="84" width="355" height="540.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="r8Z-wS-d6r" userLabel="User">
                                         <rect key="frame" x="0.0" y="0.0" width="259" height="100"/>
@@ -412,13 +443,26 @@
                                             </button>
                                         </subviews>
                                     </stackView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hyc-nH-rGj">
+                                        <rect key="frame" x="0.0" y="240.5" width="355" height="300"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="300" id="dSJ-28-6qO"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="hyc-nH-rGj" secondAttribute="trailing" id="X2F-iG-hgD"/>
+                                    <constraint firstItem="hyc-nH-rGj" firstAttribute="leading" secondItem="kfL-uc-nuB" secondAttribute="leading" id="k9b-DQ-qpI"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="kfL-uc-nuB" firstAttribute="leading" secondItem="CTy-3X-cu2" secondAttribute="leading" constant="10" id="Dmg-jl-IxG"/>
-                            <constraint firstItem="kfL-uc-nuB" firstAttribute="top" secondItem="z5z-E0-bWx" secondAttribute="bottom" constant="10" id="af3-80-7gg"/>
+                            <constraint firstItem="JC4-jK-XHS" firstAttribute="leading" secondItem="CTy-3X-cu2" secondAttribute="leading" id="IBx-O0-b4x"/>
+                            <constraint firstItem="kfL-uc-nuB" firstAttribute="top" secondItem="JC4-jK-XHS" secondAttribute="bottom" id="eaB-iP-FXx"/>
+                            <constraint firstItem="JC4-jK-XHS" firstAttribute="top" secondItem="z5z-E0-bWx" secondAttribute="bottom" id="kNY-UC-sq7"/>
+                            <constraint firstAttribute="trailing" secondItem="JC4-jK-XHS" secondAttribute="trailing" id="kgl-g7-iDs"/>
                             <constraint firstAttribute="trailing" secondItem="kfL-uc-nuB" secondAttribute="trailing" constant="10" id="rbj-Nf-Qji"/>
                         </constraints>
                     </view>
@@ -428,8 +472,11 @@
                         <outlet property="replyButton" destination="xXk-ST-lzx" id="nSL-jc-91o"/>
                         <outlet property="retweetButton" destination="8ks-a6-HWe" id="3O5-tK-gpY"/>
                         <outlet property="retweetCount" destination="ncT-cf-Afh" id="Rm1-s3-vey"/>
+                        <outlet property="topRetweetStack" destination="JC4-jK-XHS" id="trZ-cK-jmH"/>
+                        <outlet property="topRetweetText" destination="1be-k0-kMp" id="Sic-7X-Q1B"/>
                         <outlet property="tweetDate" destination="nJj-aM-Xwr" id="ndR-uh-sO1"/>
                         <outlet property="tweetMessage" destination="t7k-HF-KSl" id="GP4-LQ-qfv"/>
+                        <outlet property="tweetPic" destination="hyc-nH-rGj" id="43s-cO-6MD"/>
                         <outlet property="userImage" destination="lsB-SE-Zg9" id="SVY-Bq-CCu"/>
                         <outlet property="userName" destination="29x-il-Gbp" id="RXx-SV-JAs"/>
                         <outlet property="userScreenName" destination="ObW-W2-LS0" id="lpb-Fp-fCa"/>
@@ -438,7 +485,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5V5-V1-GZx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2673" y="127"/>
+            <point key="canvasLocation" x="2663" y="133"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dyL-Sq-k6i">

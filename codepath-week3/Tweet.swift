@@ -19,6 +19,7 @@ class Tweet: NSObject {
     var user: User?
     var favorited: Bool = false
     var retweeted: Bool = false
+    var photoUrl: String?
 
     var isARetweet: Bool = false
     var originalUser: User?
@@ -63,7 +64,17 @@ class Tweet: NSObject {
             prettyTweetTime = prettyTimeFormatter.string(from: timestamp!)
             
         }
-
+        
+        if let extendedEntities = dictionary["extended_entities"] as? Dictionary<String, AnyObject> {
+            if let medias = extendedEntities["media"] as? [Dictionary<String, AnyObject>] {
+                for media in medias {
+                    if media["type"] as! String == "photo" {
+                        photoUrl = media["url"] as? String
+                        break
+                    }
+                }
+            }
+        }
     }
     
     class func tweetsWithArray(dictionaries: [Dictionary<String, Any>]) -> [Tweet] {

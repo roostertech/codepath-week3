@@ -23,12 +23,17 @@ class SingleTweetViewController: UIViewController {
     @IBOutlet private weak var likeButton: UIButton!
     @IBOutlet private weak var retweetButton: UIButton!
     @IBOutlet private weak var replyButton: UIButton!
+    
+    @IBOutlet private weak var tweetPic: UIImageView!
+    
+    @IBOutlet private weak var topRetweetStack: UIStackView!
+    @IBOutlet private weak var topRetweetText: UILabel!
     private var addTweetAction: (Tweet?) -> () = { (newTweet: Tweet?) in }
 
     private var tweet: Tweet!
     
     private func updateView() {
-        if let user = tweet.user {
+        if let user = tweet.originalUser {
             userName.text = user.name
             userScreenName.text = "@\(user.screenName!)"
             if let url = user.profileUrl {
@@ -53,6 +58,17 @@ class SingleTweetViewController: UIViewController {
             retweetButton.imageView?.tintColor = .green
         } else {
             retweetButton.imageView?.tintColor = .black
+        }
+        
+        if tweet.isARetweet {
+            topRetweetStack.isHidden = false
+            topRetweetText.text = "Retweeted by \(tweet.user!.name!)"
+        } else {
+            topRetweetStack.isHidden = true
+        }
+        
+        if let picUrl = tweet.photoUrl {
+            tweetPic.setImageWith(URL(string: picUrl)!)
         }
     }
     
@@ -83,7 +99,13 @@ class SingleTweetViewController: UIViewController {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 if error == nil {
                     self.tweet.update(dictionary: response as! Dictionary<String, Any>)
-                    self.tweet.retweeted = false // work around api oddity
+                    
+                    // work around api not updating properly
+                    self.tweet.retweeted = false
+                    if self.tweet.user?.id == self.tweet.originalUser?.id {
+                        self.tweet.isARetweet = false
+                    }
+                    
                     self.updateView()
                     self.addTweetAction(nil) // reload tweets view
                 }

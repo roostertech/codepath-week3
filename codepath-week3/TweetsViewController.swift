@@ -19,7 +19,7 @@ class TweetsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         tweetsView.insertSubview(refreshControl, at: 0)

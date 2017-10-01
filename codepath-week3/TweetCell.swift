@@ -26,6 +26,7 @@ class TweetCell: UITableViewCell {
     @IBOutlet private weak var topRetweetImage: UIImageView!
     @IBOutlet private weak var topRetweetText: UILabel!
     
+    @IBOutlet weak var topRetweetStack: UIStackView!
     private var tweet: Tweet!
     
     override func awakeFromNib() {
@@ -66,12 +67,10 @@ class TweetCell: UITableViewCell {
         }
         
         if tweet.isARetweet {
-            topRetweetImage.isHidden = false
-            topRetweetText.isHidden = false
+            topRetweetStack.isHidden = false
             topRetweetText.text = "Retweeted by \(tweet.user!.name!)"
         } else {
-            topRetweetImage.isHidden = true
-            topRetweetText.isHidden = true
+            topRetweetStack.isHidden = true
         }
 
         retweetCount.text = tweet.retweetCount?.description

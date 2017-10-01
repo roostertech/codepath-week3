@@ -15,7 +15,7 @@ class User: NSObject {
     var screenName: String?
     var profileUrl: URL?
     var tagline: String?
-    
+    var id: String?
     var dictionary: Dictionary<String, AnyObject>?
     
     init(dictionary: Dictionary<String, AnyObject>) {
@@ -27,6 +27,7 @@ class User: NSObject {
         }
         
         tagline = dictionary["description"] as? String
+        id =  dictionary["id_str"] as? String
         self.dictionary = dictionary
     }
     
