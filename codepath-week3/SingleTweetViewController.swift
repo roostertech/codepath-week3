@@ -156,7 +156,7 @@ class SingleTweetViewController: UIViewController {
         if segue.destination is NewTweetViewController {
             
             let newTweetVC = segue.destination as! NewTweetViewController
-            newTweetVC.prepare(tweetText: "@\(tweet.user!.screenName!) ", replyTo: tweet.tweetId!, addTweetAction: addTweetAction)
+            newTweetVC.prepare(tweetText: "@\(tweet.originalUser!.screenName!) ", replyTo: tweet.tweetId!, addTweetAction: addTweetAction)
         }
     }
     

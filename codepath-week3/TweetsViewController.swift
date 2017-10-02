@@ -25,6 +25,7 @@ class TweetsViewController: UIViewController {
         tweetsView.insertSubview(refreshControl, at: 0)
         tweetsView.estimatedRowHeight = 140
         tweetsView.rowHeight = UITableViewAutomaticDimension
+        
         edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
         
         refreshData(refreshControl: nil, fetchMore: false)

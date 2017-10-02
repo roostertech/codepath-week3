@@ -27,12 +27,11 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- Retweet by... indicator
 - Show tweet media image
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
+1. Hiding element with fixed size and auto layout. How to properly use constraint outlet.
 2.
 
 ## Video Walkthrough
