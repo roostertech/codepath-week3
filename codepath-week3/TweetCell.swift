@@ -8,6 +8,7 @@
 
 import UIKit
 import AFNetworking
+import TTTAttributedLabel
 
 class TweetCell: UITableViewCell {
 
@@ -15,7 +16,7 @@ class TweetCell: UITableViewCell {
     @IBOutlet private weak var userName: UILabel!
     @IBOutlet private weak var userScreenName: UILabel!
     @IBOutlet private weak var tweetTime: UILabel!
-    @IBOutlet private weak var tweetMessage: UILabel!
+    @IBOutlet private weak var tweetMessage: TTTAttributedLabel!
     
     @IBOutlet private weak var replyCount: UILabel!
     @IBOutlet private weak var retweetCount: UILabel!
@@ -35,6 +36,8 @@ class TweetCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        tweetMessage.enabledTextCheckingTypes = NSTextCheckingAllTypes
+        tweetMessage.delegate = self
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -91,4 +94,17 @@ class TweetCell: UITableViewCell {
         tweetTime.text = tweet.timestamp?.getElapsedInterval()
     }
 
+}
+
+// MARK:- TTTAttributedLabelDelegate
+extension TweetCell: TTTAttributedLabelDelegate {
+    func attributedLabel(_ label: TTTAttributedLabel!, didSelectLinkWith url: URL!) {
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+    
+    func attributedLabel(_ label: TTTAttributedLabel!, didSelectLinkWithPhoneNumber phoneNumber: String!) {
+        if let url = URL(string: "tel://\(phoneNumber!)") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
 }

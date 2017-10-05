@@ -18,19 +18,22 @@ PODS:
     - AFNetworking/NSURLSession (~> 3.0.0)
   - MBProgressHUD (1.0.0)
   - PopupDialog (0.5.4)
+  - TTTAttributedLabel (2.0.0)
 
 DEPENDENCIES:
   - AFNetworking (= 3.0.0)
   - BDBOAuth1Manager (= 2.0.0)
   - MBProgressHUD
   - PopupDialog
+  - TTTAttributedLabel
 
 SPEC CHECKSUMS:
   AFNetworking: 932ff751f9d6fb1dad0b3af58b7e3ffba0a4e7fd
   BDBOAuth1Manager: 92d17d06f8a648602962304cd2f35ae7394fa001
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   PopupDialog: 75cf955693590b0cb2fdde00223fb65d99c57247
+  TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
 
-PODFILE CHECKSUM: b489f926d9a906eb6e7dbaba0e8082e1879a19af
+PODFILE CHECKSUM: 771a27d17ce6725deabfa4c6b68517d06e5e51ee
 
 COCOAPODS: 1.3.1
