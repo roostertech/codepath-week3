@@ -17,6 +17,8 @@ class TweetsViewController: UIViewController {
     fileprivate var tweets: [Tweet] = [Tweet]()
     fileprivate var isMoreDataLoading = false
 
+    var timeline: TwitterClient.Timeline!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,11 +30,12 @@ class TweetsViewController: UIViewController {
         
         edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
         
+        tweetsView.tableFooterView = UIView()
         refreshData(refreshControl: nil, fetchMore: false)
     }
     
-    @IBAction func onLogout(_ sender: Any) {
-        TwitterClient.sharedInstance.logout()
+    @IBAction func onOpenMenu(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: MenuEvent.toggleDrawer.rawValue), object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -47,10 +50,10 @@ class TweetsViewController: UIViewController {
             maxId = lastTweet.tweetId
         }
         
-        TwitterClient.sharedInstance.homeTimeline(maxId: maxId) { (response: Any?, error: Error?) in
-            refreshControl?.endRefreshing()
+  
+        TwitterClient.sharedInstance.fetchTimeline(maxId: maxId, timeline: timeline) { (response: Any?, error: Error?) in
             self.isMoreDataLoading = false
-
+            
             if error == nil {
                 guard let tweets = response as? [Tweet] else {
                     return
@@ -63,8 +66,26 @@ class TweetsViewController: UIViewController {
                 print("Have \(tweets.count) tweets")
                 self.tweetsView.reloadData()
             }
-            
         }
+        
+//        TwitterClient.sharedInstance.homeTimeline(maxId: maxId) { (response: Any?, error: Error?) in
+//            refreshControl?.endRefreshing()
+//            self.isMoreDataLoading = false
+//
+//            if error == nil {
+//                guard let tweets = response as? [Tweet] else {
+//                    return
+//                }
+//                if maxId == nil {
+//                    self.tweets = tweets
+//                } else {
+//                    self.tweets.append(contentsOf: tweets)
+//                }
+//                print("Have \(tweets.count) tweets")
+//                self.tweetsView.reloadData()
+//            }
+//        }
+//        
     }
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
@@ -129,6 +150,10 @@ extension TweetsViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK:- UIScrollViewDelegate
 extension TweetsViewController: UIScrollViewDelegate {
     internal func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if tweets.count < 20 {
+            // We already have all the tweets
+            return
+        }
         if (!isMoreDataLoading) {
             // Calculate the position of one screen length before the bottom of the results
             let scrollViewContentHeight = tweetsView.contentSize.height

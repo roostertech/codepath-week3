@@ -14,6 +14,7 @@ class User: NSObject {
     var name: String?
     var screenName: String?
     var profileUrl: URL?
+    var profileBannerUrl: URL?
     var tagline: String?
     var id: String?
     var dictionary: Dictionary<String, AnyObject>?
@@ -25,10 +26,16 @@ class User: NSObject {
         name = dictionary["name"] as? String
         screenName = dictionary["screen_name"] as? String
 
-        if let profileUrlString = dictionary["profile_image_url_https"] as? String {
-            profileUrl = URL(string: profileUrlString)
+        if let bannerUrlString = dictionary["profile_banner_url"] as? String {
+            profileBannerUrl = URL(string: bannerUrlString)
         }
-        
+
+        if let profileUrlString = dictionary["profile_image_url_https"] as? String {
+            // force the high res version
+            let highResProfileUrlString = profileUrlString.replacingOccurrences(of: "_normal", with: "")
+            profileUrl = URL(string: highResProfileUrlString)
+        }
+
         tagline = dictionary["description"] as? String
         id =  dictionary["id_str"] as? String
         self.dictionary = dictionary

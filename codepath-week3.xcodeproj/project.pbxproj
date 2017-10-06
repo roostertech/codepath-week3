@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		434FFD21778B4447A13C05C9 /* Pods_codepath_week3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BDFCA37EE58DF665BCA572E /* Pods_codepath_week3.framework */; };
+		761316771F871CE00005E57B /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761316761F871CE00005E57B /* Event.swift */; };
 		766537FE1F8623B8004A1D2B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766537FD1F8623B8004A1D2B /* ProfileViewController.swift */; };
 		76B4A4CD1F7B703000D72526 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B4A4CC1F7B703000D72526 /* AppDelegate.swift */; };
 		76B4A4D21F7B703000D72526 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B4A4D01F7B703000D72526 /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 		0BDFCA37EE58DF665BCA572E /* Pods_codepath_week3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_codepath_week3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F4A557AA38D60CF9613BE94 /* Pods-codepath-week3.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-codepath-week3.release.xcconfig"; path = "Pods/Target Support Files/Pods-codepath-week3/Pods-codepath-week3.release.xcconfig"; sourceTree = "<group>"; };
 		421C4128AD0BFEED4248EB11 /* Pods-codepath-week3.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-codepath-week3.debug.xcconfig"; path = "Pods/Target Support Files/Pods-codepath-week3/Pods-codepath-week3.debug.xcconfig"; sourceTree = "<group>"; };
+		761316761F871CE00005E57B /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		766537FD1F8623B8004A1D2B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		76B4A4C91F7B703000D72526 /* codepath-week3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "codepath-week3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B4A4CC1F7B703000D72526 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				76D0CB361F84AF2D006A4D87 /* HamburgerViewController.swift */,
 				76D0CB381F84B52A006A4D87 /* MenuViewController.swift */,
 				766537FD1F8623B8004A1D2B /* ProfileViewController.swift */,
+				761316761F871CE00005E57B /* Event.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				76B4A5131F7EA6C000D72526 /* TweetCell.swift in Sources */,
 				76B4A51A1F80304600D72526 /* SingleTweetViewController.swift in Sources */,
 				76B4A4CD1F7B703000D72526 /* AppDelegate.swift in Sources */,
+				761316771F871CE00005E57B /* Event.swift in Sources */,
 				76B4A4E61F7B8C0200D72526 /* User.swift in Sources */,
 				76B4A5161F7F27B900D72526 /* Date+getElapsedInterval.swift in Sources */,
 				76B4A50E1F7E288000D72526 /* TweetsViewController.swift in Sources */,

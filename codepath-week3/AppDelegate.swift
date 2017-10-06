@@ -22,7 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("There is a current user")
             
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let hamburgerVC = window!.rootViewController as! HamburgerViewController
+            
+            let hamburgerVC = storyBoard.instantiateViewController(withIdentifier: "HamburgerViewController") as! HamburgerViewController
+
             window?.rootViewController = hamburgerVC
             window?.makeKeyAndVisible()
 
@@ -30,11 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             menuVC.hamburgerViewController = hamburgerVC
             hamburgerVC.menuViewController = menuVC
-        
-            
-//            let vc = storyBoard.instantiateViewController(withIdentifier: "TweetsNavController") as! UINavigationController
-//
-
 
         } else {
             print("No current user")

@@ -13,6 +13,7 @@ class HamburgerViewController: UIViewController {
     @IBOutlet private weak var menuView: UIView!
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var leftMarginConstraint: NSLayoutConstraint!
+    private var isOpen = false
     
     var originaLeftMargin: CGFloat!
     var menuViewController: UIViewController! {
@@ -41,6 +42,13 @@ class HamburgerViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: MenuEvent.toggleDrawer.rawValue), object: nil, queue: OperationQueue.main) { (Notification) in
+            if self.isOpen {
+                self.closeMenu()
+            } else {
+                self.openMenu()
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -60,22 +68,29 @@ class HamburgerViewController: UIViewController {
         } else if sender.state == .changed {
             leftMarginConstraint.constant = originaLeftMargin + translation.x
         } else if sender.state == .ended {
-            UIView.animate(withDuration: 0.3, animations: {
-                if velocity.x > 0 {
-                    // open
-                    self.leftMarginConstraint.constant = self.view.frame.size.width - 100
-                } else {
-                    // close
-                    self.leftMarginConstraint.constant = 0
-                }
-                self.view.layoutIfNeeded()
+            
+            if velocity.x > 0 {
+                openMenu()
+                
+                
+            } else {
+                closeMenu()                                
             }
-            )
+            
         }
-        
+    }
+    
+    private func openMenu() {
+        isOpen = true
+        UIView.animate(withDuration: 0.3, animations: {
+            self.leftMarginConstraint.constant = self.view.frame.size.width - 100
+            self.view.layoutIfNeeded()
+        })
     }
     
     private func closeMenu() {
+        isOpen = false
+
         UIView.animate(withDuration: 0.3, animations: {
             self.leftMarginConstraint.constant = 0
             self.view.layoutIfNeeded()

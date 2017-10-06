@@ -39,11 +39,9 @@ class NewTweetViewController: UIViewController {
     @IBAction func onTweet(_ sender: Any) {
         tweetButton.isEnabled = false
         
-        TwitterClient.sharedInstance.updateStatus(newStatus: textInput.text, replyTo: replyTo) { (response: Any?, error: Error?) in
+        TwitterClient.sharedInstance.updateStatus(newStatus: textInput.text, replyTo: replyTo) { (response: Tweet?, error: Error?) in
             if error == nil {
                 print("Finished tweeting")
-                let newTweet = Tweet(dictionary: response as! Dictionary<String, Any>)
-                self.addTweetAction(newTweet)
                 self.dismiss(animated: true, completion: nil)
             } else {
                 self.tweetButton.isEnabled = true
