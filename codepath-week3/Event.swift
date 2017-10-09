@@ -17,3 +17,8 @@ enum TweetEvent: String {
     case newTweet = "newTweet"
     case updateTweet = "updateTweet"
 }
+
+enum UserEvent: String {
+    case updateUser = "updateUser"
+    case switchedUser = "switchedUser"
+}

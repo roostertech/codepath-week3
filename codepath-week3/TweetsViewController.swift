@@ -40,6 +40,11 @@ class TweetsViewController: UIViewController {
                 self.tweetsView.reloadData()
             }
         }
+        
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: UserEvent.switchedUser.rawValue), object: nil, queue: OperationQueue.main) {_ in 
+            self.refreshData(refreshControl: nil, fetchMore: false)
+        }
     }
     
     @IBAction func onOpenMenu(_ sender: Any) {

@@ -8,11 +8,11 @@
 
 import Foundation
 
-class User: NSObject, NSCoding {
+class User: NSObject {
     static let userDidLogout = "UserLogout"
 
     var name: String?
-    var screenName: String?
+    var screenName: String!
     var profileUrl: URL?
     var profileBannerUrl: URL?
     var tagline: String?
@@ -21,7 +21,6 @@ class User: NSObject, NSCoding {
     var tweetCount: Int?
     var followingCount: Int?
     var followerCount: Int?
-    var token: BDBOAuth1Credential?
     
     init(dictionary: Dictionary<String, AnyObject>) {
         name = dictionary["name"] as? String
@@ -83,7 +82,11 @@ class User: NSObject, NSCoding {
     
     static func loadUsers() {
         let userDefaults = UserDefaults.standard
-        var usersData: [Data] = userDefaults.array(forKey: "users") as! [Data]
+        guard let data = userDefaults.array(forKey: "users") else {
+            print("No users")
+            return
+        }
+        var usersData: [Data] = data as! [Data]
         
         for index in 0...(usersData.count-1) {
             let data: Data = usersData[index]
@@ -114,6 +117,19 @@ class User: NSObject, NSCoding {
                 print("Removing \(user.screenName!)")
                 users.remove(at: index)
                 storeUsers()
+                
+                if currentUser?.screenName == userToRemove.screenName {
+                    print("Removed current user")
+                    if users.count > 0 {
+                        let newUser = users[0]
+                        TwitterClient.sharedInstance.switchCredential(to: newUser.screenName!, success: {
+                            currentUser = newUser
+                        }, failure: { (Error) in
+                            
+                        })
+                    }
+                }
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: UserEvent.updateUser.rawValue), object: nil)
                 return
             }
         }

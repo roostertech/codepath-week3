@@ -30,10 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.rootViewController = hamburgerVC
             window?.makeKeyAndVisible()
 
-            let menuVC = storyBoard.instantiateViewController(withIdentifier: "MenuViewController") as! MenuViewController
-            
-            menuVC.hamburgerViewController = hamburgerVC
-            hamburgerVC.menuViewController = menuVC
+//            let menuVC = storyBoard.instantiateViewController(withIdentifier: "MenuViewController") as! MenuViewController
+//            
+//            menuVC.hamburgerViewController = hamburgerVC
+//            hamburgerVC.menuViewController = menuVC
 
         } else {
             print("No current user")

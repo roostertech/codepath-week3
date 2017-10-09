@@ -64,6 +64,10 @@ class MenuViewController: UITableViewController {
                 }
             })
         }
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: UserEvent.switchedUser.rawValue), object: nil, queue: OperationQueue.main) { (Notification) in
+            self.renderUser(user: User.currentUser!)
+        }
     }
     
     private func renderUser(user: User) {
@@ -82,7 +86,8 @@ class MenuViewController: UITableViewController {
         
         switch indexPath.row {
         case MenuItem.user.rawValue:
-            hamburgerViewController.contentViewController = profileViewController
+//            hamburgerViewController.contentViewController = profileViewController
+            hamburgerViewController.toggleAccount()
             return
         case MenuItem.home.rawValue:
             hamburgerViewController.contentViewController = homeNavController

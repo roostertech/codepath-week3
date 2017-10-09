@@ -14,11 +14,15 @@ import UIKit
 
 class HamburgerViewController: UIViewController {
     
+    @IBOutlet private weak var accountView: UIView!
     @IBOutlet private weak var menuView: UIView!
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var leftMarginConstraint: NSLayoutConstraint!
-    private var isOpen = false
-    
+    private var isMenuOpen = false
+    private var isAccountOpen = false
+
+    @IBOutlet weak var leftMenuConstraint: NSLayoutConstraint!
+
     private var gestureDelegate: ContainerViewGestureDelegate?
     
     var originaLeftMargin: CGFloat!
@@ -26,6 +30,13 @@ class HamburgerViewController: UIViewController {
         didSet {
             view.layoutIfNeeded()
             menuView.addSubview(menuViewController.view)
+        }
+    }
+    var accountViewController: AccountsViewController! {
+        didSet {
+            accountViewController.willMove(toParentViewController: self)
+            accountView.addSubview(accountViewController.view)
+            accountViewController.didMove(toParentViewController: self)
         }
     }
     
@@ -51,9 +62,18 @@ class HamburgerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        accountViewController = storyBoard.instantiateViewController(withIdentifier: "AccountsViewController") as! AccountsViewController
+        
+        accountViewController.hamburgerViewController = self
+
+        let menuVC = storyBoard.instantiateViewController(withIdentifier: "MenuViewController") as! MenuViewController
+        menuVC.hamburgerViewController = self
+        self.menuViewController = menuVC
+        
         // Do any additional setup after loading the view.
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: MenuEvent.toggleDrawer.rawValue), object: nil, queue: OperationQueue.main) { (Notification) in
-            if self.isOpen {
+            if self.isMenuOpen {
                 self.closeMenu()
             } else {
                 self.openMenu()
@@ -95,8 +115,27 @@ class HamburgerViewController: UIViewController {
         }
     }
     
+    func toggleAccount() {
+        if isAccountOpen {
+            UIView.animate(withDuration: 0.3, animations: {
+                //            self.leftMenuConstraint.con
+                self.leftMenuConstraint.constant = 0
+                self.view.layoutIfNeeded()
+            })
+        } else {
+            self.accountViewController.accountTable.reloadData()
+
+            UIView.animate(withDuration: 0.3, animations: {
+                //            self.leftMenuConstraint.con
+                self.leftMenuConstraint.constant = self.view.frame.size.width - 100
+                self.view.layoutIfNeeded()
+            })
+        }
+        isAccountOpen = !isAccountOpen
+    }
+    
     private func openMenu() {
-        isOpen = true
+        isMenuOpen = true
         UIView.animate(withDuration: 0.3, animations: {
             self.leftMarginConstraint.constant = self.view.frame.size.width - 100
             self.view.layoutIfNeeded()
@@ -104,7 +143,7 @@ class HamburgerViewController: UIViewController {
     }
     
     private func closeMenu() {
-        isOpen = false
+        isMenuOpen = false
 
         UIView.animate(withDuration: 0.3, animations: {
             self.leftMarginConstraint.constant = 0

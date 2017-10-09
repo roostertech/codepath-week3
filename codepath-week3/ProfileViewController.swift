@@ -28,20 +28,7 @@ class ProfileViewController: UIViewController {
             // display own profile
             tweeets = TwitterClient.sharedInstance.getHomeTweets()
 
-            if let user = TwitterClient.sharedInstance.getUserProfile() {
-                userProfile = user
-                profileTableView.reloadData()
-                
-                updateUser()
-            } else {
-                TwitterClient.sharedInstance.fetchUserProfile(completion: { (user: User?, error: Error?) in
-                    if error == nil {
-                        self.userProfile = user!
-                        self.profileTableView.reloadData()
-                        self.updateUser()
-                    }
-                })
-            }
+            showCurrentUserProfile()
 
         } else {
             TwitterClient.sharedInstance.fetchUserProfile(userScreenName: profileScreenName!, completion: { (user: User?, error: Error?) in
@@ -53,8 +40,29 @@ class ProfileViewController: UIViewController {
             })
         }
         
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: UserEvent.switchedUser.rawValue), object: nil, queue: OperationQueue.main) {_ in
+            if self.profileScreenName == nil {
+                self.showCurrentUserProfile()
+            }
+        }
     }
-    
+    private func showCurrentUserProfile() {
+        if let user = TwitterClient.sharedInstance.getUserProfile() {
+            userProfile = user
+            profileTableView.reloadData()
+            
+            updateUser()
+        } else {
+            TwitterClient.sharedInstance.fetchUserProfile(completion: { (user: User?, error: Error?) in
+                if error == nil {
+                    self.userProfile = user!
+                    self.profileTableView.reloadData()
+                    self.updateUser()
+                }
+            })
+        }
+        
+    }
     private func updateUser() {
         TwitterClient.sharedInstance.fetchUserTimeline(maxId: nil, screenName: userProfile.screenName, completion: { (response: Any?, error: Error?) in
             if error == nil {

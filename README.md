@@ -23,10 +23,10 @@ The following **optional** features are implemented:
    - [x] As the paging view moves, increase the opacity of the background screen. See the actual Twitter app for this effect
    - [x] Pulling down the profile page should blur and resize the header image.
 - [x] Account switching
-   - [ ] Long press on tab bar to bring up Account view with animation
-   - [ ] Tap account to switch to
-   - [ ] Include a plus button to Add an Account
-   - [ ] Swipe to delete an account
+   - [x] Long press on tab bar to bring up Account view with animation (Switched with click on user picture to bring up accounts view)
+   - [x] Tap account to switch to
+   - [x] Include a plus button to Add an Account
+   - [x] Swipe to delete an account
 
 
 The following **additional** features are implemented:
@@ -43,9 +43,10 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+![](gifs/twitter2.gif)
 
 ## Notes
 

@@ -27,7 +27,25 @@ class TwitterClient: BDBOAuth1SessionManager {
     private var userProfile: User?
     private var homeTweets: [Tweet] = []
     
-    func login(success: @escaping  ()->(), failure: @escaping (Error) -> ()) {
+    func switchCredential(to screenName: String, success: @escaping  ()->(), failure: @escaping (Error) -> ()) {
+        if let token = Credentials.instance.getToken(for: screenName) {
+            deauthorize()
+            requestSerializer.saveAccessToken(token)
+            
+            fetchHomeTimeline(maxId: nil, completion: { (response: Any?, error: Error?) in
+            })
+//            fetchMentionTimeline(maxId: nil, completion: { (response: Any?, error: Error?) in
+//            })
+            
+            success()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: UserEvent.switchedUser.rawValue), object: nil)
+            return
+        } else {
+            login(screenName: screenName, success: success, failure: failure)
+        }
+    }
+    
+    func login(screenName: String?, success: @escaping  ()->(), failure: @escaping (Error) -> ()) {
         loginSuccess = success
         loginFailure = failure
         
@@ -36,7 +54,12 @@ class TwitterClient: BDBOAuth1SessionManager {
             BDBOAuth1Credential!)-> Void in
             print("Got token \(requestToken.token)")
             
-            let url = URL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token!)")
+            var url: URL!
+            if screenName != nil {
+                url = URL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token!)&screen_name=\(screenName!)")
+            } else {
+                url = URL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token!)")
+            }
             UIApplication.shared.open(url!, options: [String: Any](), completionHandler: nil)
         },failure: {(error: Error!) -> Void in
             print("Error \(error.localizedDescription)")
@@ -73,9 +96,10 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     func handleOpenUrl(url: URL) {
-        getAccessToken(queryString: url.query, success: {
+        getAccessToken(queryString: url.query, success: {(token: BDBOAuth1Credential) in
             self.currentAccount(success: { (user: User) in
                 User.currentUser = user
+                Credentials.instance.addCreds(for: user.screenName!, token: token)
                 self.loginSuccess?()
             }, failure: { (error: Error) in
                 self.loginFailure?(error)
@@ -85,14 +109,11 @@ class TwitterClient: BDBOAuth1SessionManager {
         }
     }
     
-    func getAccessToken(queryString: String!, success: @escaping  ()->(), failure: @escaping (Error) -> ()) {
+    func getAccessToken(queryString: String!, success: @escaping (BDBOAuth1Credential)->(), failure: @escaping (Error) -> ()) {
         let requestToken = BDBOAuth1Credential(queryString: queryString)
         fetchAccessToken(withPath: "oauth/access_token", method: "POST", requestToken: requestToken, success: { (token: BDBOAuth1Credential!) -> Void in
             print("access token \(token.token)")
-            let data = try! JSONSerialization.data(withJSONObject: token, options: [])
-            print("access token \(data)")
-
-            success()
+            success(token)
         }, failure: { (error: Error!) -> Void in
             print("Error \(error.localizedDescription)")
             failure(error)
@@ -278,7 +299,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     func post(params: [String : String?], endpoint: String, completion: @escaping (Any?, Error?) -> ()) {
         print("Invoking POST \(endpoint) params \(params)")
         post(endpoint, parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
-            print(response ?? "No response?")
+//            print(response ?? "No response?")
             completion(response, nil)
             
             // yep being super lazy here, TODO
@@ -292,7 +313,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     func get(params: [String : String?], endpoint: String, completion: @escaping (Any?, Error?) -> ()) {
         print("Invoking GET \(endpoint) params \(params)")
         get(endpoint, parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
-            print(response ?? "No response?")
+//            print(response ?? "No response?")
             completion(response, nil)
         }, failure: { (task: URLSessionDataTask?, error: Error) in
             print("Error \(error.localizedDescription)")

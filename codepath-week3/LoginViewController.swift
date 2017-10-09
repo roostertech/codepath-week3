@@ -27,7 +27,7 @@ class LoginViewController: UIViewController {
     
 
     @IBAction func onLogin(_ sender: Any) {
-        TwitterClient.sharedInstance.login(success: {
+        TwitterClient.sharedInstance.login(screenName: nil, success: {
             print("Logged in !!")
             self.launchMenu()
 //            self.performSegue(withIdentifier: "loginSegue", sender: nil)
@@ -39,12 +39,12 @@ class LoginViewController: UIViewController {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         
         let hamburgerVC = storyBoard.instantiateViewController(withIdentifier: "HamburgerViewController") as! HamburgerViewController
-        
-        let menuVC = storyBoard.instantiateViewController(withIdentifier: "MenuViewController") as! MenuViewController
-        
-        menuVC.hamburgerViewController = hamburgerVC
-        hamburgerVC.menuViewController = menuVC
-        
+//        
+//        let menuVC = storyBoard.instantiateViewController(withIdentifier: "MenuViewController") as! MenuViewController
+//        
+//        menuVC.hamburgerViewController = hamburgerVC
+//        hamburgerVC.menuViewController = menuVC
+//        
         self.present(hamburgerVC, animated: true, completion: nil)
     }
 }
@@ -64,7 +64,7 @@ extension LoginViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: didSelectRowAt, animated: false)
         
         let user = User.users[didSelectRowAt.row]
-        TwitterClient.sharedInstance.authenticate(screenName: user.screenName!, success: { 
+        TwitterClient.sharedInstance.switchCredential(to: user.screenName!, success: {
             self.launchMenu()
         }) { (Error) in
         
