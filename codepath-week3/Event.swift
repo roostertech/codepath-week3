@@ -15,4 +15,5 @@ enum MenuEvent: String {
 
 enum TweetEvent: String {
     case newTweet = "newTweet"
+    case updateTweet = "updateTweet"
 }

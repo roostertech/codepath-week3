@@ -16,8 +16,7 @@ class NewTweetViewController: UIViewController {
     
     fileprivate var replyTo: String?
     fileprivate var initialText: String?
-    fileprivate var addTweetAction: (Tweet) -> () = { (newTweet: Tweet) in }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,13 +52,9 @@ class NewTweetViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func prepare(tweetText: String?, replyTo: String?, addTweetAction: ((Tweet) -> ())?) {
+    func prepare(tweetText: String?, replyTo: String?) {
         self.initialText = tweetText
         self.replyTo = replyTo
-        
-        if addTweetAction != nil {
-            self.addTweetAction = addTweetAction!
-        }
     }
 }
 

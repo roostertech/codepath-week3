@@ -14,8 +14,10 @@ class MenuViewController: UITableViewController {
         case user = 0,
         home,
         profile,
-        mentions
+        mentions,
+        logout
     }
+    
     @IBOutlet weak var userProfileImage: UIImageView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var userScreenName: UILabel!
@@ -90,6 +92,9 @@ class MenuViewController: UITableViewController {
             return
         case MenuItem.mentions.rawValue:
             hamburgerViewController.contentViewController = mentionNavController
+            return
+        case MenuItem.logout.rawValue:
+            TwitterClient.sharedInstance.logout()
             return
         default:
             return

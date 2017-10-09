@@ -11,6 +11,7 @@ import BDBOAuth1Manager
 
 class LoginViewController: UIViewController {
 
+    @IBOutlet weak var userTableView: UITableView!
     @IBOutlet private weak var loginButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +29,45 @@ class LoginViewController: UIViewController {
     @IBAction func onLogin(_ sender: Any) {
         TwitterClient.sharedInstance.login(success: {
             print("Logged in !!")
-            self.performSegue(withIdentifier: "loginSegue", sender: nil)
+            self.launchMenu()
+//            self.performSegue(withIdentifier: "loginSegue", sender: nil)
         }) { (error: Error) in
+        }
+    }
+    
+    func launchMenu () {
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let hamburgerVC = storyBoard.instantiateViewController(withIdentifier: "HamburgerViewController") as! HamburgerViewController
+        
+        let menuVC = storyBoard.instantiateViewController(withIdentifier: "MenuViewController") as! MenuViewController
+        
+        menuVC.hamburgerViewController = hamburgerVC
+        hamburgerVC.menuViewController = menuVC
+        
+        self.present(hamburgerVC, animated: true, completion: nil)
+    }
+}
+
+extension LoginViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return User.users.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.textLabel?.text = User.users[indexPath.row].screenName
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt: IndexPath) {
+        tableView.deselectRow(at: didSelectRowAt, animated: false)
+        
+        let user = User.users[didSelectRowAt.row]
+        TwitterClient.sharedInstance.authenticate(screenName: user.screenName!, success: { 
+            self.launchMenu()
+        }) { (Error) in
+        
         }
     }
 }

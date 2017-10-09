@@ -19,6 +19,7 @@ class TweetsViewController: UIViewController {
 
     var timeline: TwitterClient.Timeline!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,6 +33,13 @@ class TweetsViewController: UIViewController {
         
         tweetsView.tableFooterView = UIView()
         refreshData(refreshControl: nil, fetchMore: false)
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: TweetEvent.updateTweet.rawValue), object: nil, queue: OperationQueue.main) { (Notification) in
+            if self.timeline == TwitterClient.Timeline.home {
+                self.tweets = TwitterClient.sharedInstance.getTimeline(timeline: self.timeline)
+                self.tweetsView.reloadData()
+            }
+        }
     }
     
     @IBAction func onOpenMenu(_ sender: Any) {
@@ -110,15 +118,11 @@ class TweetsViewController: UIViewController {
                 return
             }
             let indexPath = self.tweetsView.indexPath(for: cell)
-            detailController.prepare(tweet: tweets[indexPath!.row], addTweetAction: { (newTweet: Tweet?) in
-                self.onNewTweet(newTweet)
-            })
+            detailController.prepare(tweet: tweets[indexPath!.row])
             
         } else if segue.destination is NewTweetViewController {
             let vc = segue.destination as! NewTweetViewController
-            vc.prepare(tweetText: nil, replyTo: nil, addTweetAction: { (newTweet: Tweet) in
-                self.onNewTweet(newTweet)
-            })
+            vc.prepare(tweetText: nil, replyTo: nil)
         }
     }
     

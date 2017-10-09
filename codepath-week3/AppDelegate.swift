@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        User.loadUsers()
+        
         if User.currentUser != nil {
             print("There is a current user")
             
@@ -36,10 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             print("No current user")
         }
-        
-//        let hamburgerVC = window!.rootViewController as! HamburgerViewController
-//        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: User.userDidLogout), object: nil, queue: OperationQueue.main) { (Notification) in
             

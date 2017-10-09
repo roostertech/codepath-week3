@@ -29,7 +29,6 @@ class SingleTweetViewController: UIViewController {
     @IBOutlet private weak var topRetweetStack: UIStackView!
     @IBOutlet private weak var topRetweetText: UILabel!
     
-    private var addTweetAction: (Tweet?) -> () = { (newTweet: Tweet?) in }
     private var tweet: Tweet!
     
     private func updateView() {
@@ -38,8 +37,7 @@ class SingleTweetViewController: UIViewController {
             userScreenName.text = "@\(user.screenName!)"
             if let url = user.profileUrl {
                 userImage.setImageWith(url)
-                userImage.layer.cornerRadius = 5
-                userImage.layer.masksToBounds = true;
+
             }
         }
         
@@ -75,7 +73,23 @@ class SingleTweetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         likeButton.tintColor = .red
+        
+        userImage.layer.cornerRadius = 5
+        userImage.layer.masksToBounds = true;
+        
+        userImage.isUserInteractionEnabled = true
+        let imageTap = UITapGestureRecognizer()
+        imageTap.numberOfTapsRequired = 1
+        imageTap.addTarget(self, action: #selector(didTapProfileImage(_:)))
+        
+        userImage.addGestureRecognizer(imageTap)
+        
+        
         updateView()
+    }
+    
+    func didTapProfileImage(_ gesture: UITapGestureRecognizer) {
+        performSegue(withIdentifier: "showProfile", sender: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -107,7 +121,7 @@ class SingleTweetViewController: UIViewController {
                     }
                     
                     self.updateView()
-                    self.addTweetAction(nil) // reload tweets view
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: TweetEvent.updateTweet.rawValue), object: nil)
                 }
             })
         } else {
@@ -117,8 +131,7 @@ class SingleTweetViewController: UIViewController {
                 if error == nil {
                     self.tweet.update(dictionary: response as! Dictionary<String, Any>)
                     self.updateView()
-                    self.addTweetAction(nil) // reload tweets view
-
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: TweetEvent.updateTweet.rawValue), object: nil)
                 }
             })
         }
@@ -136,7 +149,8 @@ class SingleTweetViewController: UIViewController {
                 if error == nil {
                     self.tweet.update(dictionary: response as! Dictionary<String, Any>)
                     self.updateView()
-                    self.addTweetAction(nil) // reload tweets view
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: TweetEvent.updateTweet.rawValue), object: nil)
+
                 }
             })
         } else {
@@ -146,24 +160,26 @@ class SingleTweetViewController: UIViewController {
                 if error == nil {
                     self.tweet.update(dictionary: response as! Dictionary<String, Any>)
                     self.updateView()
-                    self.addTweetAction(nil) // reload tweets view
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: TweetEvent.updateTweet.rawValue), object: nil)
                 }
             })
         }
     }
+
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.destination is NewTweetViewController {
             
             let newTweetVC = segue.destination as! NewTweetViewController
-            newTweetVC.prepare(tweetText: "@\(tweet.originalUser!.screenName!) ", replyTo: tweet.tweetId!, addTweetAction: addTweetAction)
+            newTweetVC.prepare(tweetText: "@\(tweet.originalUser!.screenName!) ", replyTo: tweet.tweetId!)        } else if segue.destination is ProfileViewController {
+            let profileVC = segue.destination as! ProfileViewController
+            profileVC.prepare(tweet.originalUser!.screenName!)
+//            profileVC.profileScreenName = tweet.originalUser?.screenName
         }
     }
     
-    func prepare(tweet: Tweet!, addTweetAction: ((Tweet?) -> ())?) {
+    func prepare(tweet: Tweet) {
         self.tweet = tweet
-        if addTweetAction != nil {
-            self.addTweetAction = addTweetAction!
-        }
     }
 }

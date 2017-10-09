@@ -8,12 +8,18 @@
 
 import UIKit
 
+@objc protocol ContainerViewGestureDelegate {
+    @objc optional func onPanGesture(gesture: UIPanGestureRecognizer)
+}
+
 class HamburgerViewController: UIViewController {
     
     @IBOutlet private weak var menuView: UIView!
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var leftMarginConstraint: NSLayoutConstraint!
     private var isOpen = false
+    
+    private var gestureDelegate: ContainerViewGestureDelegate?
     
     var originaLeftMargin: CGFloat!
     var menuViewController: UIViewController! {
@@ -35,6 +41,10 @@ class HamburgerViewController: UIViewController {
             contentView.addSubview(contentViewController.view)
             contentViewController.didMove(toParentViewController: self)
             closeMenu()
+            
+            if contentViewController is ContainerViewGestureDelegate {
+                gestureDelegate = (contentViewController as! ContainerViewGestureDelegate)
+            }
         }
     }
     
@@ -58,6 +68,8 @@ class HamburgerViewController: UIViewController {
     
     
     @IBAction func onPanGesture(_ sender: UIPanGestureRecognizer) {
+        gestureDelegate?.onPanGesture?(gesture: sender)
+        
         let translation = sender.translation(in: view)
         let velocity = sender.velocity(in: view)
         
@@ -66,13 +78,16 @@ class HamburgerViewController: UIViewController {
         if sender.state == .began {
             originaLeftMargin = leftMarginConstraint.constant
         } else if sender.state == .changed {
+            // Don't swipe left
+            if leftMarginConstraint.constant <= 0 && translation.x < 0 {
+                return
+            }
+            
             leftMarginConstraint.constant = originaLeftMargin + translation.x
         } else if sender.state == .ended {
             
             if velocity.x > 0 {
                 openMenu()
-                
-                
             } else {
                 closeMenu()                                
             }

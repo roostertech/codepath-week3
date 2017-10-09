@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		434FFD21778B4447A13C05C9 /* Pods_codepath_week3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BDFCA37EE58DF665BCA572E /* Pods_codepath_week3.framework */; };
 		761316771F871CE00005E57B /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761316761F871CE00005E57B /* Event.swift */; };
-		766537FE1F8623B8004A1D2B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766537FD1F8623B8004A1D2B /* ProfileViewController.swift */; };
+		765B05B31F88B22200CDFE3F /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765B05B21F88B22200CDFE3F /* ProfileViewController.swift */; };
 		76B4A4CD1F7B703000D72526 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B4A4CC1F7B703000D72526 /* AppDelegate.swift */; };
 		76B4A4D21F7B703000D72526 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B4A4D01F7B703000D72526 /* Main.storyboard */; };
 		76B4A4D41F7B703000D72526 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B4A4D31F7B703000D72526 /* Assets.xcassets */; };
@@ -25,6 +25,7 @@
 		76B4A51A1F80304600D72526 /* SingleTweetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B4A5191F80304600D72526 /* SingleTweetViewController.swift */; };
 		76D0CB371F84AF2D006A4D87 /* HamburgerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0CB361F84AF2D006A4D87 /* HamburgerViewController.swift */; };
 		76D0CB391F84B52A006A4D87 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0CB381F84B52A006A4D87 /* MenuViewController.swift */; };
+		76E8EA5B1F88B10200C0AA0E /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E8EA5A1F88B10200C0AA0E /* ProfileCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +33,7 @@
 		1F4A557AA38D60CF9613BE94 /* Pods-codepath-week3.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-codepath-week3.release.xcconfig"; path = "Pods/Target Support Files/Pods-codepath-week3/Pods-codepath-week3.release.xcconfig"; sourceTree = "<group>"; };
 		421C4128AD0BFEED4248EB11 /* Pods-codepath-week3.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-codepath-week3.debug.xcconfig"; path = "Pods/Target Support Files/Pods-codepath-week3/Pods-codepath-week3.debug.xcconfig"; sourceTree = "<group>"; };
 		761316761F871CE00005E57B /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		766537FD1F8623B8004A1D2B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		765B05B21F88B22200CDFE3F /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		76B4A4C91F7B703000D72526 /* codepath-week3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "codepath-week3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B4A4CC1F7B703000D72526 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B4A4D11F7B703000D72526 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -50,6 +51,7 @@
 		76B4A5191F80304600D72526 /* SingleTweetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleTweetViewController.swift; sourceTree = "<group>"; };
 		76D0CB361F84AF2D006A4D87 /* HamburgerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HamburgerViewController.swift; sourceTree = "<group>"; };
 		76D0CB381F84B52A006A4D87 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		76E8EA5A1F88B10200C0AA0E /* ProfileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,8 +119,8 @@
 				76B4A5191F80304600D72526 /* SingleTweetViewController.swift */,
 				76D0CB361F84AF2D006A4D87 /* HamburgerViewController.swift */,
 				76D0CB381F84B52A006A4D87 /* MenuViewController.swift */,
-				766537FD1F8623B8004A1D2B /* ProfileViewController.swift */,
 				761316761F871CE00005E57B /* Event.swift */,
+				765B05B21F88B22200CDFE3F /* ProfileViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -144,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				76B4A5121F7EA6C000D72526 /* TweetCell.swift */,
+				76E8EA5A1F88B10200C0AA0E /* ProfileCell.swift */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -307,12 +310,13 @@
 				76B4A4CD1F7B703000D72526 /* AppDelegate.swift in Sources */,
 				761316771F871CE00005E57B /* Event.swift in Sources */,
 				76B4A4E61F7B8C0200D72526 /* User.swift in Sources */,
+				765B05B31F88B22200CDFE3F /* ProfileViewController.swift in Sources */,
 				76B4A5161F7F27B900D72526 /* Date+getElapsedInterval.swift in Sources */,
 				76B4A50E1F7E288000D72526 /* TweetsViewController.swift in Sources */,
 				76D0CB391F84B52A006A4D87 /* MenuViewController.swift in Sources */,
+				76E8EA5B1F88B10200C0AA0E /* ProfileCell.swift in Sources */,
 				76B4A4E81F7B94AB00D72526 /* TwitterClient.swift in Sources */,
 				76B4A5181F7F751F00D72526 /* NewTweetViewController.swift in Sources */,
-				766537FE1F8623B8004A1D2B /* ProfileViewController.swift in Sources */,
 				76D0CB371F84AF2D006A4D87 /* HamburgerViewController.swift in Sources */,
 				76B4A4E41F7B8BF100D72526 /* Tweet.swift in Sources */,
 			);

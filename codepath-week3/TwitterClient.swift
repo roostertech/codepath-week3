@@ -17,6 +17,8 @@ class TwitterClient: BDBOAuth1SessionManager {
     enum Timeline: String {
         case home = "home"
         case mention = "mentions"
+        case user = "user"
+
     }
     
     private var loginSuccess: (()->())?
@@ -42,11 +44,32 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
     }
     
+    func authenticate(screenName: String, success: @escaping  ()->(), failure: @escaping (Error) -> ()) {
+        loginSuccess = success
+        loginFailure = failure
+        
+        print("Authenticating \(screenName)")
+        deauthorize()
+        fetchRequestToken(withPath: "oauth/request_token", method: "GET", callbackURL: URL(string:"cptwit://oauth"), scope: nil, success: { (requestToken:
+            BDBOAuth1Credential!)-> Void in
+            print("Got token \(requestToken.token)")
+            
+            let url = URL(string: "https://api.twitter.com/oauth/authenticate?oauth_token=\(requestToken.token!)&screen_name=\(screenName)")
+            UIApplication.shared.open(url!, options: [String: Any](), completionHandler: nil)
+        },failure: {(error: Error!) -> Void in
+            print("Error \(error.localizedDescription)")
+            failure(error)
+        })
+    }
+    
     func logout() {
         deauthorize()
         User.currentUser = nil
         
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: User.userDidLogout), object: nil)
+        // if user is last user, go back to login screen
+        if User.currentUser == nil {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: User.userDidLogout), object: nil)
+        }
     }
     
     func handleOpenUrl(url: URL) {
@@ -66,31 +89,15 @@ class TwitterClient: BDBOAuth1SessionManager {
         let requestToken = BDBOAuth1Credential(queryString: queryString)
         fetchAccessToken(withPath: "oauth/access_token", method: "POST", requestToken: requestToken, success: { (token: BDBOAuth1Credential!) -> Void in
             print("access token \(token.token)")
+            let data = try! JSONSerialization.data(withJSONObject: token, options: [])
+            print("access token \(data)")
+
             success()
         }, failure: { (error: Error!) -> Void in
             print("Error \(error.localizedDescription)")
             failure(error)
         })
     }
-    
-    func homeTimeline(maxId: String?, completion: @escaping (Any?, Error?) -> ()) {
-        var params: [String: String] = [String: String]()
-        if maxId != nil {
-            params["max_id"] = maxId
-        }
-        
-        self.get(params: params, endpoint: "1.1/statuses/home_timeline.json") { (response: Any?, error: Error?) in
-            if error == nil {
-                let dictionaries = response as! [Dictionary<String, Any>]
-                let tweets = Tweet.tweetsWithArray(dictionaries: dictionaries)
-                self.homeTweets = tweets
-                completion(tweets, nil)
-            } else {
-                completion(nil, error)
-            }
-        }
-    }
-    
 
     
     //MARK:- Timelines
@@ -121,6 +128,19 @@ class TwitterClient: BDBOAuth1SessionManager {
         fetchTimeline(params: params, timeline: .mention, completion:  completion)
     }
     
+    func fetchUserTimeline(maxId: String?, screenName: String?, completion: @escaping (Any?, Error?) -> ()) {
+        var params: [String: String] = [String: String]()
+        if maxId != nil {
+            params["max_id"] = maxId
+        }
+        
+        if screenName != nil {
+            params["screen_name"] = screenName
+        }
+        fetchTimeline(params: params, timeline: .user, completion:  completion)
+    }
+    
+
 
     func fetchTimeline(maxId: String?, timeline: Timeline, completion: @escaping (Any?, Error?) -> ()) {
         var params: [String: String] = [String: String]()
@@ -136,6 +156,16 @@ class TwitterClient: BDBOAuth1SessionManager {
             if error == nil {
                 let dictionaries = response as! [Dictionary<String, Any>]
                 let tweets = Tweet.tweetsWithArray(dictionaries: dictionaries)
+                switch timeline {
+                case .home:
+                    if params["max_id"] != nil {
+                        self.homeTweets.append(contentsOf: tweets)
+                    } else {
+                        self.homeTweets = tweets
+                    }
+                default:
+                    break
+                }
                 completion(tweets, nil)
             } else {
                 completion(nil, error)
@@ -143,23 +173,31 @@ class TwitterClient: BDBOAuth1SessionManager {
         }
     }
     
-    func getTimeline(timeline: Timeline) {
+    func getTimeline(timeline: Timeline) -> [Tweet] {
         switch timeline {
         case .home:
-            
-            break
-        case .mention:
-            break
+            return homeTweets
+        default:
+            // not caching other type yet
+            return []
         }
     }
-    
-    
     
     //MAKR:- Profile
     func getUserProfile() -> User? {
         return userProfile
     }
     
+    func fetchUserProfile(userScreenName: String, completion: @escaping (User?, Error?) -> ()) {
+        self.get(params: [:], endpoint: "1.1/users/show.json?screen_name=" + userScreenName) { (response: Any?, error: Error?) in
+            if error == nil {
+                let user = User(dictionary: response as! Dictionary)
+                completion(user, error)
+            } else {
+                completion(nil, error)
+            }
+        }
+    }
 
     func fetchUserProfile(completion: @escaping (User?, Error?) -> ()) {
         print("Fetching user profile")
@@ -199,6 +237,8 @@ class TwitterClient: BDBOAuth1SessionManager {
             if error == nil {
                 let newTweet = Tweet(dictionary: response as! Dictionary<String, Any>)
                 self.homeTweets.insert(newTweet, at: 0)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: TweetEvent.newTweet.rawValue), object: nil)
+
                 completion(newTweet, error)
             }
         }
@@ -240,6 +280,9 @@ class TwitterClient: BDBOAuth1SessionManager {
         post(endpoint, parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
             print(response ?? "No response?")
             completion(response, nil)
+            
+            // yep being super lazy here, TODO
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: TweetEvent.updateTweet.rawValue), object: nil)
         }, failure: { (task: URLSessionDataTask?, error: Error) in
             print("Error \(error.localizedDescription)")
             completion(nil, error)
